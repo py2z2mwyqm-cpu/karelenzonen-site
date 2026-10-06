@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Na spiegel.py: maakt verwijzingen naar wp-content/wp-includes relatief, zodat de kopie op elke host draait."""
 import glob, os
-os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), "public"))
+os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), "docs"))
 n = 0
 for f in glob.glob('**/*', recursive=True):
     if not f.endswith(('.html', '.css', '.js')):
@@ -15,21 +15,22 @@ for f in glob.glob('**/*', recursive=True):
         open(f, 'w', encoding='utf-8', errors='surrogateescape').write(s); n += 1
 print('aangepast', n)
 
-# Contactformulier: versturen naar /contact.php in plaats van WordPress (admin-ajax bestaat niet meer).
+# Contactformulier: versturen naar de formulierdienst op Railway in plaats van WordPress (admin-ajax bestaat niet meer).
 import shutil
 FORMSCRIPT = """<script id="kz-contactformulier">
 (function () {
+  var FORMULIER = 'https://karelenzonen-formulier-production.up.railway.app/contact';
   document.addEventListener('submit', function (e) {
     var f = e.target;
     if (!f.classList || !f.classList.contains('brxe-form')) return;
     e.stopImmediatePropagation();
-    f.setAttribute('action', '/contact.php');
+    f.setAttribute('action', FORMULIER);
     f.setAttribute('method', 'post');
   }, true);
   document.addEventListener('DOMContentLoaded', function () {
     var f = document.querySelector('form.brxe-form');
     if (!f) return;
-    f.setAttribute('action', '/contact.php');
+    f.setAttribute('action', FORMULIER);
     var h = document.createElement('input');
     h.type = 'text'; h.name = 'website'; h.tabIndex = -1; h.autocomplete = 'off';
     h.setAttribute('aria-hidden', 'true');
@@ -54,5 +55,6 @@ for f in glob.glob('**/*.html', recursive=True):
     if 'brxe-form' in s and 'kz-contactformulier' not in s:
         s = s.replace('</body>', FORMSCRIPT + '\n</body>', 1)
         open(f, 'w', encoding='utf-8', errors='surrogateescape').write(s); m += 1
-shutil.copy(os.path.join('..', 'extra', 'contact.php'), 'contact.php')
+open('CNAME', 'w').write('karelenzonen.nl\n')
+open('.nojekyll', 'w').write('')
 print('formulier omgezet op', m, 'pagina\'s')

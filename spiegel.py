@@ -2,7 +2,7 @@
 """Maakt een statische kopie van karelenzonen.nl met dezelfde paden (voor verhuizing van Cloud86 naar Hostnet)."""
 import re, os, sys, urllib.request, urllib.parse, html
 BASIS = "https://karelenzonen.nl"
-DOEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), "public")
+DOEL = os.path.join(os.path.dirname(os.path.abspath(__file__)), "docs")
 UA = {"User-Agent": "Mozilla/5.0 (KAREL-spiegel)"}
 gedaan, wachtrij, fouten = set(), [], []
 
