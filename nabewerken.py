@@ -58,3 +58,18 @@ for f in glob.glob('**/*.html', recursive=True):
 open('CNAME', 'w').write('karelenzonen.nl\n')
 open('.nojekyll', 'w').write('')
 print('formulier omgezet op', m, 'pagina\'s')
+
+# Links naar Mensje: mensje.pro draait nog als oude WordPress-site op het Cloud86-account van de oude
+# bouwer; alle links gaan daarom naar mensje.karel.pro. Op de homepage wordt "Mensje" in de welkomsttekst een link.
+import re as _re
+MENSJE = 'https://mensje.karel.pro/'
+k = 0
+for f in glob.glob('**/*.html', recursive=True):
+    s = open(f, encoding='utf-8', errors='surrogateescape').read(); o = s
+    s = _re.sub(r'href="https?://(?:www\.)?mensje\.pro/?"', 'href="' + MENSJE + '"', s)
+    if f == 'index.html':
+        s = s.replace('geavanceerd systeem genaamd &#8220;Mensje&#8221;.',
+                      'geavanceerd systeem genaamd &#8220;<a href="' + MENSJE + '">Mensje</a>&#8221;.', 1)
+    if s != o:
+        open(f, 'w', encoding='utf-8', errors='surrogateescape').write(s); k += 1
+print('Mensje-links bijgewerkt op', k, "pagina's")
