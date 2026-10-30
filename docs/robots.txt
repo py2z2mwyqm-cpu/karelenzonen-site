@@ -1,5 +1,4 @@
 User-agent: *
-Disallow: /wp-admin/
-Allow: /wp-admin/admin-ajax.php
+Allow: /
 
-Sitemap: https://karelenzonen.nl/wp-sitemap.xml
+Sitemap: https://karelenzonen.nl/sitemap.xml
